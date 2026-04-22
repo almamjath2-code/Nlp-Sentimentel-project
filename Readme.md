@@ -1,55 +1,69 @@
-# 📘 NLP Sentiment Analysis Project
+# 📘 Sentiment Analysis Project
 
-This project is a complete **Natural Language Processing (NLP) pipeline** for sentiment analysis using Python and machine learning.
+# 📌 Project Overview
 
----
+This project performs **Sentiment Analysis** using Natural Language Processing (NLP) to classify text into:
 
-# 🚀 Project Overview
+* Positive 😊
+* Negative 😡
+* Neutral 😐
 
-The goal of this project is to:
+The system uses text preprocessing, TF-IDF feature extraction, and a machine learning model (**LinearSVC**) to predict sentiment.
 
-* Clean and preprocess text data(including stopword removal)
-* Perform Exploratory Data Analysis (EDA)
-* Convert text into numerical features using TF-IDF
-* Train a machine learning model (LinearSVC)
-* Evaluate performance using classification metrics
+A **Streamlit web app** is built for real-time predictions.
 
 ---
 
-# 📦 Libraries Used
+# 🌐 Live Demo
+
+👉 https://nlp-sentimentel-project-bqhuuhestxutsyvasprkf3.streamlit.app/
+
+---
+
+# 🗂 Dataset
+
+* Text data (user reviews/comments)
+* Target: Sentiment (Positive / Negative / Neutral)
+
+---
+
+# 🛠 Libraries & Modules Used
 
 ```python
 import nltk
 import pandas as pd
 import contractions
-import re
-from nltk.corpus import stopwords
-from collections import Counter
+import re                      # ✅ for text cleaning (regex)
+from collections import Counter  # ✅ for word frequency
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
+
+from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 from nltk import pos_tag
 from nltk.stem import WordNetLemmatizer
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
+
 import joblib
 ```
 
 ---
 
-# 📥 NLTK Downloads
-## ⚠️ Important Notes
+# ⚠️ Important Notes (Very Important)
 
-* ❌ Do NOT include the following in `requirements.txt`:
+* `re` and `collections` are **built-in Python modules** → ❌ do NOT add in `requirements.txt`
+* `nltk.download()` → ❌ do NOT include in requirements
+* These must be handled separately
 
-  * `re` (Python built-in module)
-  * `collections` (Python built-in module)
+---
 
-* ❌ `nltk.download()` should NOT be added to `requirements.txt`
+# 📥 NLTK Setup
 
-* ✅ After installing requirements, run the following separately to download NLTK data:
+Run this **once before using the project**:
 
 ```python
 import nltk
@@ -57,82 +71,64 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 ```
 
-
-Run this once before starting:
-
-```python
-nltk.download('stopwords')
-nltk.download('wordnet')
-```
-
 ---
 
-# 🧹 Text Preprocessing Steps
+# 🧹 Text Preprocessing
 
 * Lowercasing text
-* Removing HTML tags
-* Expanding contractions (don’t → do not)
-* Removing special characters
+* Removing HTML tags using `re`
+* Expanding contractions (`don't → do not`)
+* Removing special characters using regex (`re`)
 * Removing stopwords
-* Lemmatization using WordNetLemmatizer
+* Lemmatization using WordNet
 
 ---
 
 # 📊 Exploratory Data Analysis (EDA)
 
-* Class distribution (positive / negative / neutral)
-* Word frequency analysis
-* Word cloud ☁️
+* Class distribution
+* Word frequency using `collections.Counter`
+* WordCloud visualization ☁️
+* Text length analysis
 
 ---
 
-# 🧠 Feature Extraction
+# 🧠 Feature Engineering
 
-We use **TF-IDF Vectorization**:
+TF-IDF (Term Frequency - Inverse Document Frequency):
 
 ```python
-from sklearn.feature_extraction.text import TfidfVectorizer
+TfidfVectorizer()
 ```
 
 ---
 
 # 🤖 Model Training
 
-We use **Linear Support Vector Classifier (LinearSVC)**
+Model Used: **Linear Support Vector Classifier (LinearSVC)**
 
 Steps:
 
-* Split train/test data
-* Train model on TF-IDF features
-* Predict sentiment
+* Train/Test split
+* Model training
+* Prediction
 
 ---
 
-# 📈 Model Evaluation Results
+# 📈 Model Performance
 
-## 🔹 TRAIN SET
+| Dataset | Accuracy | Precision | Recall | F1-Score |
+| ------- | -------- | --------- | ------ | -------- |
+| Train   | 0.7394   | 0.7414    | 0.7110 | 0.7197   |
+| Test    | 0.7114   | 0.7081    | 0.6802 | 0.6882   |
 
-* Accuracy : **0.7394 (73.94%)**
-* Precision: **0.7414**
-* Recall   : **0.7110**
-* F1-score : **0.7197**
-
-## 🔹 TEST SET
-
-* Accuracy : **0.7114 (71.14%)**
-* Precision: **0.7081**
-* Recall   : **0.6802**
-* F1-score : **0.6882**
-
-## 🔍 Model Fit Check
-
-✔ Good Fit (No overfitting, good generalization)
+✔ Good Fit (no overfitting)
 
 ---
 
-# 📊 Confusion Matrix (Summary)
+# 📊 Confusion Matrix
 
-Model performs well across all classes (Positive / Negative / Neutral) with balanced predictions.
+Model performs well with small misclassification between similar sentiments.
 
 ---
 
@@ -145,30 +141,31 @@ joblib.dump(tfidf, "tfidf_vectorizer.pkl")
 
 ---
 
-# 🌐 App.py (Flask / Streamlit App)
+# 🌐 Application (sentiment_app.py)
 
-This project includes an **app.py** file to run predictions in real time.
+Main application file: **sentiment_app.py**
 
-## ▶️ Run App
+## 📌 What it does:
+
+* Load trained model
+* Load TF-IDF vectorizer
+* Accept user input
+* Clean text (using `re` + preprocessing pipeline)
+* Predict sentiment
+* Display result (😊 😡 😐)
+
+---
+
+# ▶️ Run Application
 
 ```bash
-python app.py
+pip install -r requirements.txt
+streamlit run sentiment_app.py
 ```
-
-## 📌 What app.py does:
-
-* Loads trained model
-* Loads TF-IDF vectorizer
-* Takes user input text
-* Cleans text
-* Predicts sentiment
-* Shows output (Positive / Negative / Neutral)
 
 ---
 
 # ⚙️ Requirements
-
-Install dependencies:
 
 ```bash
 pip install pandas nltk contractions scikit-learn matplotlib wordcloud joblib
@@ -176,45 +173,53 @@ pip install pandas nltk contractions scikit-learn matplotlib wordcloud joblib
 
 ---
 
-# ▶️ How to Run Project
+# 📈 Project Workflow
 
-### 1️⃣ Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 2️⃣ Run model training (if needed)
-
-```bash
-
-```
-
-### 3️⃣ Run application
-
-```bash
-streamlit run app.py
-```
+* Load dataset
+* Data cleaning (using `re`)
+* Stopword removal
+* Lemmatization
+* EDA using `Counter`
+* Feature extraction (TF-IDF)
+* Model training
+* Evaluation
+* Deployment (Streamlit app)
 
 ---
 
-# 📊 Output Example
+# 💡 Insights
 
-* Positive 😊
-* Negative 😡
-* Neutral 😐
+* Keywords strongly influence sentiment
+* Negative texts contain strong emotional words
+* Neutral texts are less expressive
+* Preprocessing improves accuracy significantly
 
 ---
 
-# 🚀 Future Improvements
+# ⚡ Future Improvements
 
-* Use BERT / LSTM for better accuracy
-* Improve preprocessing (emoji + slang handling)
-* Add web UI (Streamlit dashboard)
+* Use BERT / LSTM
+* Improve emoji & slang handling
 * Hyperparameter tuning
+* Deploy to cloud
+
+---
+
+# 📁 Project Structure
+
+sentiment_analysis_project/
+│
+├─ data/
+├─ notebooks/
+├─ sentiment_app.py
+├─ sentiment_model.pkl
+├─ tfidf_vectorizer.pkl
+├─ requirements.txt
+└─ README.md
 
 ---
 
 # 👨‍💻 Author
 
-Built for learning NLP, machine learning pipeline, and sentiment
+**Amjath**
+📧 [almamjath2@gmail.com](mailto:almamjath2@gmail.com)
