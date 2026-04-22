@@ -1,7 +1,0 @@
-pandas
-nltk
-contractions
-matplotlib
-wordcloud
-scikit-learn
-joblib
